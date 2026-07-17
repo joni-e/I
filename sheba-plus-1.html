@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="general" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sheba+ | Digital Healthcare Supply Chain</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --bg:#FAFAF7;
+  --ink:#14171F;
+  --muted:#5B6270;
+  --line:rgba(20,23,31,.10);
+  --card:#FFFFFF;
+  --card-2:#F3F2EC;
+  --radius:20px;
+  --shadow:0 1px 2px rgba(20,23,31,.04), 0 12px 32px -16px rgba(20,23,31,.18);
+  --font-display:'Fraunces', serif;
+  --font-body:'Manrope', sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+  --nav-h:78px;
+}
+html[data-theme="general"]{ --g1:#0F766E; --g2:#14B8A6; --accent:#0F766E; --accent-soft:#E4F5F2; }
+html[data-theme="diabetes"]{ --g1:#B45309; --g2:#FBBF24; --accent:#B45309; --accent-soft:#FDF1DA; }
+html[data-theme="heart"]{ --g1:#BE123C; --g2:#FB7185; --accent:#BE123C; --accent-soft:#FCE4E9; }
+html[data-theme="children"]{ --g1:#15803D; --g2:#84CC16; --accent:#15803D; --accent-soft:#E4F4E0; }
+html[data-theme="elderly"]{ --g1:#0369A1; --g2:#38BDF8; --accent:#0369A1; --accent-soft:#E1F1FB; }
+html[data-theme="maternity"]{ --g1:#6D28D9; --g2:#D946EF; --accent:#6D28D9; --accent-soft:#EFE3FC; }
+
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  padding-bottom:calc(var(--nav-h) + 10px);
+  transition:background .4s ease;
+}
+html[data-lang="bn"] body{ font-family:'Hind Siliguri', var(--font-body); }
+img,svg{display:block;}
+a{color:inherit; text-decoration:none;}
+.wrap{max-width:560px; margin:0 auto; padding:0 20px; position:relative;}
+h1,h2,h3{font-family:var(--font-display); font-weight:600; letter-spacing:-.01em;}
+html[data-lang="bn"] h1, html[data-lang="bn"] h2, html[data-lang="bn"] h3{ font-family:'Hind Siliguri', var(--font-display); font-weight:700; }
+.mono{font-family:var(--font-mono);}
+.reveal{opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal.in{opacity:1; transform:translateY(0);}
+[data-i18n]{transition:opacity .25s ease;}
+
+/* ============ HEADER ============ */
+.topbar{
+  position:sticky; top:0; z-index:40; backdrop-filter:blur(14px);
+  background:rgba(250,250,247,.82); border-bottom:1px solid var(--line);
+}
+.topbar-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 20px; max-width:560px; margin:0 auto;}
+.brand{display:flex; align-items:center; gap:9px;}
+.brand-mark{
+  width:34px; height:34px; border-radius:10px;
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  display:flex; align-items:center; justify-content:center;
+  transition:background .5s ease;
+}
+.brand-mark svg{width:18px; height:18px; stroke:#fff;}
+.brand-name{font-family:var(--font-display); font-weight:700; font-size:18px;}
+.brand-name sup{font-size:11px; color:var(--accent); transition:color .5s ease;}
+.top-actions{display:flex; align-items:center; gap:8px;}
+.lang-btn{
+  font-family:var(--font-mono); font-size:11.5px; font-weight:600; letter-spacing:.03em;
+  border:1px solid var(--line); background:var(--card); color:var(--ink);
+  border-radius:100px; padding:8px 12px; cursor:pointer; display:flex; align-items:center; gap:6px;
+  transition:border-color .2s ease;
+}
+.lang-btn:active{transform:scale(.96);}
+
+/* ============ HERO ============ */
+.hero{position:relative; padding:34px 0 8px; overflow:hidden;}
+.hero-blob{
+  position:absolute; top:-120px; right:-90px; width:320px; height:320px; border-radius:50%;
+  background:linear-gradient(135deg,var(--g1),var(--g2)); opacity:.16; filter:blur(10px);
+  animation:float 9s ease-in-out infinite; transition:background 1s ease;
+}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(-14px,18px) scale(1.06);}}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px;
+  letter-spacing:.08em; color:var(--accent); background:var(--accent-soft); padding:6px 12px;
+  border-radius:100px; font-weight:600; transition:color .5s ease, background .5s ease;
+}
+.eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--accent); transition:background .5s ease; animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.3;}}
+.hero h1{font-size:34px; line-height:1.08; margin-top:16px; max-width:420px;}
+.hero .grad-text{
+  background:linear-gradient(135deg,var(--g1),var(--g2)); -webkit-background-clip:text; background-clip:text; color:transparent;
+  transition:background 1.5s ease;
+}
+.hero p{color:var(--muted); font-size:15px; line-height:1.6; margin-top:14px; max-width:420px;}
+.stat-row{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:22px;}
+.stat{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 6px; text-align:center;}
+.stat b{display:block; font-family:var(--font-mono); font-size:16px; color:var(--accent); transition:color .5s ease;}
+.stat span{font-size:9.5px; color:var(--muted); line-height:1.3; display:block; margin-top:2px;}
+
+/* theme picker - signature element */
+.theme-picker{margin-top:28px;}
+.theme-picker h3{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); font-weight:700; font-family:var(--font-body);}
+html[data-lang="bn"] .theme-picker h3{font-family:'Hind Siliguri';}
+.theme-picker p.hint{font-size:12.5px; color:var(--muted); margin-top:4px;}
+.chip-row{display:flex; gap:8px; overflow-x:auto; padding:14px 2px 4px; scrollbar-width:none;}
+.chip-row::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto; display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:10px 14px; border-radius:16px; border:1px solid var(--line); background:var(--card);
+  cursor:pointer; font-size:11.5px; font-weight:600; color:var(--muted); min-width:74px;
+  transition:all .25s ease;
+}
+.chip .emoji{font-size:20px;}
+.chip.active{
+  border-color:transparent; color:#fff;
+  background:linear-gradient(135deg,var(--g1),var(--g2));
+  box-shadow:0 8px 18px -8px var(--g1); transform:translateY(-2px);
+}
+
+/* ============ SECTION FRAME ============ */
+section{padding:52px 0 0;}
+.sec-head{margin-bottom:22px;}
+.sec-num{font-family:var(--font-mono); font-size:11px; color:var(--accent); font-weight:700; transition:color .5s ease;}
+.sec-title{font-size:24px; margin-top:6px;}
+.sec-sub{color:var(--muted); font-size:14px; margin-top:6px; line-height:1.55;}
+
+/* ============ CARDS / GRID ============ */
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow);}
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.node-card{
+  background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 12px;
+  display:flex; flex-direction:column; gap:8px; transition:transform .25s ease, border-color .25s ease;
+}
+.node-card:active{transform:scale(.97);}
+.node-ic{
+  width:36px; height:36px; border-radius:10px; background:var(--accent-soft); display:flex; align-items:center; justify-content:center;
+  transition:background .5s ease;
+}
+.node-ic svg{width:18px; height:18px; stroke:var(--accent); transition:stroke .5s ease;}
+.node-card b{font-size:13px; font-weight:700;}
+.node-card span{font-size:11.5px; color:var(--muted); line-height:1.4;}
+
+/* ============ DISTRIBUTION FLOW ============ */
+.flow{position:relative; padding:8px 0 8px 34px;}
+.flow::before{
+  content:''; position:absolute; left:11px; top:6px; bottom:6px; width:2px;
+  background:linear-gradient(var(--g1),var(--g2)); border-radius:2px; transition:background .5s ease;
+}
+.flow-step{position:relative; padding-bottom:26px;}
+.flow-step:last-child{padding-bottom:0;}
+.flow-dot{
+  position:absolute; left:-34px; top:2px; width:24px; height:24px; border-radius:50%;
+  background:var(--card); border:2px solid var(--accent); display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-mono); font-size:10px; font-weight:700; color:var(--accent); transition:border-color .5s ease, color .5s ease;
+}
+.flow-step b{font-size:14.5px; display:block;}
+.flow-step span{font-size:12px; color:var(--muted);}
+.pulse-rider{
+  position:absolute; left:-30px; width:16px; height:16px; border-radius:50%;
+  background:linear-gradient(135deg,var(--g1),var(--g2)); box-shadow:0 0 0 4px var(--accent-soft);
+  animation:ride 5s ease-in-out infinite;
+}
+@keyframes ride{0%{top:2px;} 100%{top:calc(100% - 20px);}}
+.flow-note{
+  margin-top:16px; background:var(--accent-soft); border-radius:14px; padding:12px 14px; font-size:12.5px;
+  color:var(--ink); transition:background .5s ease; display:flex; gap:8px; align-items:flex-start;
+}
+
+/* ============ CHANNEL PILLS ============ */
+.pill-grid{display:flex; flex-wrap:wrap; gap:8px;}
+.pill{
+  border:1px solid var(--line); background:var(--card); border-radius:100px; padding:9px 13px; font-size:12.5px;
+  font-weight:600; display:flex; align-items:center; gap:6px; transition:transform .2s ease;
+}
+.pill:hover{transform:translateY(-2px);}
+.pill .dot2{width:6px; height:6px; border-radius:50%; background:var(--accent); transition:background .5s ease;}
+
+/* ============ STEPPER ============ */
+.stepper{display:flex; flex-direction:column; gap:0;}
+.step{display:flex; gap:14px; position:relative; padding-bottom:20px;}
+.step:last-child{padding-bottom:0;}
+.step::before{
+  content:''; position:absolute; left:15px; top:34px; bottom:0; width:1.5px; background:var(--line);
+}
+.step:last-child::before{display:none;}
+.step-num{
+  flex:0 0 32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--g1),var(--g2));
+  color:#fff; font-family:var(--font-mono); font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;
+  transition:background .5s ease; z-index:1;
+}
+.step-body b{font-size:13.5px; display:block; margin-bottom:2px;}
+.step-body span{font-size:12px; color:var(--muted); line-height:1.5;}
+
+/* ============ DELIVERY TYPES ============ */
+.deliv-scroll{display:flex; gap:10px; overflow-x:auto; padding:4px 2px 10px; scrollbar-width:none;}
+.deliv-scroll::-webkit-scrollbar{display:none;}
+.deliv-card{
+  flex:0 0 148px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px;
+}
+.deliv-time{font-family:var(--font-mono); font-size:18px; font-weight:700; color:var(--accent); transition:color .5s ease;}
+.deliv-card b{display:block; font-size:12.5px; margin-top:6px;}
+.deliv-card span{font-size:11px; color:var(--muted);}
+
+/* ============ PROFILE / DASHBOARD ============ */
+.profile-card{
+  background:linear-gradient(150deg,var(--g1),var(--g2)); border-radius:22px; padding:20px; color:#fff;
+  position:relative; overflow:hidden; transition:background 1s ease;
+}
+.profile-card::after{
+  content:''; position:absolute; right:-40px; top:-40px; width:150px; height:150px; border-radius:50%;
+  background:rgba(255,255,255,.12);
+}
+.profile-top{display:flex; justify-content:space-between; align-items:flex-start; position:relative;}
+.profile-top small{opacity:.8; font-size:11px; letter-spacing:.04em;}
+.profile-top .pts{font-family:var(--font-mono); font-size:26px; font-weight:700; margin-top:4px;}
+.loy-badge{background:rgba(255,255,255,.2); border-radius:100px; padding:5px 10px; font-size:10.5px; font-weight:700;}
+.profile-bar{height:6px; background:rgba(255,255,255,.25); border-radius:100px; margin-top:16px; overflow:hidden;}
+.profile-bar i{display:block; height:100%; width:64%; background:#fff; border-radius:100px;}
+.profile-foot{display:flex; justify-content:space-between; margin-top:8px; font-size:10.5px; opacity:.85;}
+
+.widget-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:14px;}
+.widget{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px;}
+.widget svg{width:16px; height:16px; stroke:var(--accent); transition:stroke .5s ease;}
+.widget b{display:block; font-size:12px; margin-top:8px;}
+.widget span{font-size:10.5px; color:var(--muted);}
+
+/* KPI dashboard */
+.kpi-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.kpi{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px;}
+.kpi span.lbl{font-size:10.5px; color:var(--muted); font-weight:600;}
+.kpi .val{font-family:var(--font-mono); font-size:19px; font-weight:700; margin-top:4px;}
+.spark{display:flex; align-items:flex-end; gap:2px; height:22px; margin-top:8px;}
+.spark i{flex:1; background:linear-gradient(180deg,var(--g2),var(--g1)); border-radius:2px 2px 0 0; opacity:.85; transition:background .5s ease;}
+
+/* subscription plans */
+.plan-row{display:flex; gap:10px; overflow-x:auto; padding:2px 2px 10px; scrollbar-width:none;}
+.plan-row::-webkit-scrollbar{display:none;}
+.plan{flex:0 0 128px; text-align:center; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 8px;}
+.plan .emoji{font-size:22px;}
+.plan b{display:block; font-size:12px; margin-top:8px;}
+
+/* two column lists */
+.two-col{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+.list-col h4{font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); font-weight:700; margin-bottom:10px;}
+.list-col ul{list-style:none;}
+.list-col li{font-size:12.5px; padding:7px 0; border-bottom:1px dashed var(--line); display:flex; gap:7px; align-items:flex-start;}
+.list-col li::before{content:'—'; color:var(--accent); transition:color .5s ease;}
+
+/* compliance callout */
+.callout{
+  border:1px solid var(--line); border-left:3px solid var(--accent); background:var(--accent-soft); border-radius:14px;
+  padding:16px; transition:background .5s ease, border-color .5s ease;
+}
+.callout .callout-head{display:flex; gap:8px; align-items:center; font-weight:700; font-size:13px; margin-bottom:6px;}
+.callout p{font-size:12.5px; color:var(--ink); line-height:1.6; opacity:.85;}
+
+/* tech chips */
+.tech-grid{display:flex; flex-wrap:wrap; gap:7px;}
+.tech-chip{font-family:var(--font-mono); font-size:11px; border:1px solid var(--line); border-radius:8px; padding:6px 10px; background:var(--card);}
+
+/* vision closing */
+.vision{
+  border-radius:24px; padding:26px 22px; margin-top:10px; color:#fff;
+  background:linear-gradient(160deg,var(--g1),var(--g2)); position:relative; overflow:hidden;
+  transition:background 1s ease;
+}
+.vision h3{font-size:20px; max-width:320px;}
+.vision p{font-size:13px; opacity:.9; margin-top:10px; line-height:1.6; max-width:340px;}
+.vision ul{margin-top:14px; padding-left:0; list-style:none; display:flex; flex-direction:column; gap:7px;}
+.vision li{font-size:12px; display:flex; gap:8px; align-items:flex-start; opacity:.95;}
+
+.footer{padding:36px 0 10px; text-align:center;}
+.footer span{font-size:11px; color:var(--muted); font-family:var(--font-mono);}
+
+/* ============ BOTTOM NAV ============ */
+.bottom-nav{
+  position:fixed; left:0; right:0; bottom:0; z-index:50; height:var(--nav-h);
+  background:rgba(255,255,255,.86); backdrop-filter:blur(18px); border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.bn-inner{max-width:560px; margin:0 auto; height:64px; display:flex; align-items:center; justify-content:space-around; position:relative;}
+.bn-item{
+  display:flex; flex-direction:column; align-items:center; gap:4px; background:none; border:none; cursor:pointer;
+  color:var(--muted); font-family:var(--font-body); font-size:10px; font-weight:700; padding:6px 10px; border-radius:14px;
+  transition:color .25s ease;
+}
+html[data-lang="bn"] .bn-item{font-family:'Hind Siliguri';}
+.bn-item svg{width:21px; height:21px; stroke:var(--muted); transition:stroke .3s ease, transform .3s ease;}
+.bn-item.active{color:var(--accent);}
+.bn-item.active svg{stroke:var(--accent); transform:translateY(-2px);}
+.bn-item.active .bn-dot{opacity:1; transform:scale(1);}
+.bn-dot{width:4px; height:4px; border-radius:50%; background:var(--accent); opacity:0; transform:scale(0); transition:all .3s ease; position:absolute; margin-top:26px;}
+
+@media (min-width:601px){
+  .hero h1{font-size:40px;}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.5 5 5.5.8-4 3.9.9 5.5L12 14.8 7.1 17.2l.9-5.5-4-3.9L9.5 7z"/></svg></div>
+      <div class="brand-name">Sheba<sup>+</sup></div>
+    </div>
+    <div class="top-actions">
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5h7M9 3v2c0 4.5-2.5 8-6 9.5M5 9c1.5 3 4 5 7 6M14 21l4-9 4 9M15.5 18h5"/></svg>
+        <span id="langLabel">বাংলা</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HOME ================= -->
+<main>
+<section id="home" class="hero">
+  <div class="wrap">
+    <div class="hero-blob"></div>
+    <span class="eyebrow"><span class="dot"></span><span data-i18n="hero.eyebrow"></span></span>
+    <h1 data-i18n="hero.title"></h1>
+    <p data-i18n="hero.sub"></p>
+
+    <div class="stat-row">
+      <div class="stat"><b class="mono" data-count="9">0</b><span data-i18n="stat.potential"></span></div>
+      <div class="stat"><b class="mono" data-count="9.5">0</b><span data-i18n="stat.scale"></span></div>
+      <div class="stat"><b class="mono" data-count="8.5">0</b><span data-i18n="stat.digital"></span></div>
+      <div class="stat"><b class="mono" data-count="9.5">0</b><span data-i18n="stat.fit"></span></div>
+    </div>
+
+    <div class="theme-picker">
+      <h3 data-i18n="theme.label"></h3>
+      <p class="hint" data-i18n="theme.hint"></p>
+      <div class="chip-row" id="chipRow">
+        <div class="chip active" data-theme="general"><span class="emoji">🩺</span><span data-i18n="cat.general"></span></div>
+        <div class="chip" data-theme="diabetes"><span class="emoji">💉</span><span data-i18n="cat.diabetes"></span></div>
+        <div class="chip" data-theme="heart"><span class="emoji">❤️</span><span data-i18n="cat.heart"></span></div>
+        <div class="chip" data-theme="children"><span class="emoji">🧸</span><span data-i18n="cat.children"></span></div>
+        <div class="chip" data-theme="elderly"><span class="emoji">🧓</span><span data-i18n="cat.elderly"></span></div>
+        <div class="chip" data-theme="maternity"><span class="emoji">🤰</span><span data-i18n="cat.maternity"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ECOSYSTEM ================= -->
+<section id="ecosystem">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title" data-i18n="eco.title"></h2>
+      <p class="sec-sub" data-i18n="eco.sub"></p>
+    </div>
+    <div class="grid-2" id="ecoGrid"></div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title" data-i18n="dist.title"></h2>
+      <p class="sec-sub" data-i18n="dist.sub"></p>
+    </div>
+    <div class="card reveal">
+      <div class="flow">
+        <div class="pulse-rider"></div>
+        <div class="flow-step"><div class="flow-dot">1</div><b data-i18n="dist.s1t"></b><span data-i18n="dist.s1d"></span></div>
+        <div class="flow-step"><div class="flow-dot">2</div><b data-i18n="dist.s2t"></b><span data-i18n="dist.s2d"></span></div>
+        <div class="flow-step"><div class="flow-dot">3</div><b data-i18n="dist.s3t"></b><span data-i18n="dist.s3d"></span></div>
+        <div class="flow-step"><div class="flow-dot">4</div><b data-i18n="dist.s4t"></b><span data-i18n="dist.s4d"></span></div>
+        <div class="flow-step"><div class="flow-dot">5</div><b data-i18n="dist.s5t"></b><span data-i18n="dist.s5d"></span></div>
+      </div>
+      <div class="flow-note">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:0 0 auto;margin-top:1px;"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <span data-i18n="dist.note"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SERVICES ================= -->
+<section id="services" style="margin-top:8px;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title" data-i18n="chan.title"></h2>
+      <p class="sec-sub" data-i18n="chan.sub"></p>
+    </div>
+    <div class="pill-grid reveal" id="channelGrid"></div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title" data-i18n="presc.title"></h2>
+      <p class="sec-sub" data-i18n="presc.sub"></p>
+    </div>
+    <div class="card reveal">
+      <div class="stepper" id="stepperGrid"></div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title" data-i18n="deliv.title"></h2>
+      <p class="sec-sub" data-i18n="deliv.sub"></p>
+    </div>
+    <div class="deliv-scroll reveal" id="delivRow"></div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title" data-i18n="sub.title"></h2>
+      <p class="sec-sub" data-i18n="sub.sub"></p>
+    </div>
+    <div class="plan-row reveal" id="planRow"></div>
+  </div>
+</section>
+
+<!-- ================= DASHBOARD ================= -->
+<section id="dashboard" style="margin-top:8px;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">07</span>
+      <h2 class="sec-title" data-i18n="prof.title"></h2>
+      <p class="sec-sub" data-i18n="prof.sub"></p>
+    </div>
+    <div class="profile-card reveal">
+      <div class="profile-top">
+        <div>
+          <small data-i18n="prof.loyalty"></small>
+          <div class="pts mono"><span data-count="2480">0</span></div>
+        </div>
+        <div class="loy-badge" data-i18n="prof.tier"></div>
+      </div>
+      <div class="profile-bar"><i></i></div>
+      <div class="profile-foot"><span data-i18n="prof.next"></span><span>640 pts</span></div>
+    </div>
+    <div class="widget-grid" id="widgetGrid"></div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">08</span>
+      <h2 class="sec-title" data-i18n="loy.title"></h2>
+      <p class="sec-sub" data-i18n="loy.sub"></p>
+    </div>
+    <div class="card reveal">
+      <div class="list-col">
+        <ul id="loyList"></ul>
+      </div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">09</span>
+      <h2 class="sec-title" data-i18n="kpi.title"></h2>
+      <p class="sec-sub" data-i18n="kpi.sub"></p>
+    </div>
+    <div class="kpi-grid reveal" id="kpiGrid"></div>
+  </div>
+</section>
+
+<!-- ================= MORE ================= -->
+<section id="more" style="margin-top:8px;">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="sec-num">10</span>
+      <h2 class="sec-title" data-i18n="rider.title"></h2>
+      <p class="sec-sub" data-i18n="rider.sub"></p>
+    </div>
+    <div class="pill-grid reveal" id="riderGrid"></div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">11</span>
+      <h2 class="sec-title" data-i18n="corp.title"></h2>
+      <p class="sec-sub" data-i18n="corp.sub"></p>
+    </div>
+    <div class="card reveal">
+      <div class="two-col">
+        <div class="list-col"><h4 data-i18n="corp.h1"></h4><ul id="corpList"></ul></div>
+        <div class="list-col"><h4 data-i18n="corp.h2"></h4><ul id="campList"></ul></div>
+      </div>
+    </div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">12</span>
+      <h2 class="sec-title" data-i18n="tech.title"></h2>
+      <p class="sec-sub" data-i18n="tech.sub"></p>
+    </div>
+    <div class="tech-grid reveal" id="techGrid"></div>
+
+    <div class="sec-head reveal" style="margin-top:44px;">
+      <span class="sec-num">13</span>
+      <h2 class="sec-title" data-i18n="comp.title"></h2>
+    </div>
+    <div class="callout reveal">
+      <div class="callout-head">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span data-i18n="comp.head"></span>
+      </div>
+      <p data-i18n="comp.body"></p>
+    </div>
+
+    <div class="vision reveal" style="margin-top:34px;">
+      <h3 data-i18n="vis.title"></h3>
+      <p data-i18n="vis.sub"></p>
+      <ul id="visList"></ul>
+    </div>
+
+    <div class="footer">
+      <span data-i18n="footer.text"></span>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ================= BOTTOM NAV ================= -->
+<nav class="bottom-nav">
+  <div class="bn-inner">
+    <button class="bn-item active" data-target="home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      <span data-i18n="nav.home"></span><i class="bn-dot"></i>
+    </button>
+    <button class="bn-item" data-target="ecosystem">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.2"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="19" r="2.2"/><path d="M12 7.2v6M12 13.2L6.4 17.4M12 13.2l5.6 4.2"/></svg>
+      <span data-i18n="nav.eco"></span><i class="bn-dot"></i>
+    </button>
+    <button class="bn-item" data-target="services">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+      <span data-i18n="nav.serv"></span><i class="bn-dot"></i>
+    </button>
+    <button class="bn-item" data-target="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V10M12 19V5M20 19v-6"/></svg>
+      <span data-i18n="nav.dash"></span><i class="bn-dot"></i>
+    </button>
+    <button class="bn-item" data-target="more">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>
+      <span data-i18n="nav.more"></span><i class="bn-dot"></i>
+    </button>
+  </div>
+</nav>
+
+<script>
+/* ============================================================
+   I18N DICTIONARY
+============================================================ */
+const dict = {
+en:{
+  "hero.eyebrow":"DIGITAL HEALTHCARE SUPPLY CHAIN",
+  "hero.title":"Medicine to your door, <span class=\"grad-text\">trust</span> built in.",
+  "hero.sub":"Last-mile delivery, digital ordering, and localized marketing woven into one platform — built for how Bangladesh actually shops for medicine.",
+  "stat.potential":"Business Potential",
+  "stat.scale":"Scalability",
+  "stat.digital":"Digital Innovation",
+  "stat.fit":"Bangladesh Fit",
+  "theme.label":"Retheme by care journey",
+  "theme.hint":"Every patient category reshapes the app around what matters to them.",
+  "cat.general":"General",
+  "cat.diabetes":"Diabetes",
+  "cat.heart":"Heart",
+  "cat.children":"Children",
+  "cat.elderly":"Elderly",
+  "cat.maternity":"Maternity",
+  "eco.title":"One ecosystem, ten roles",
+  "eco.sub":"Not just a delivery app — a network connecting everyone medicine passes through.",
+  "dist.title":"Distribution network",
+  "dist.sub":"Medicine moves down a short chain so it reaches you fast, not around the city and back.",
+  "dist.s1t":"Central Warehouse",
+  "dist.s1d":"Bulk stock, quality control, cold-chain storage.",
+  "dist.s2t":"Regional Hub",
+  "dist.s2d":"Distributes across a city or district zone.",
+  "dist.s3t":"Local Hub",
+  "dist.s3d":"Neighbourhood-level stock, closest to riders.",
+  "dist.s4t":"Delivery Rider",
+  "dist.s4d":"Covers a tight 2–3 km radius only.",
+  "dist.s5t":"Customer",
+  "dist.s5d":"Order arrives in 30–60 minutes on average.",
+  "dist.note":"GPS routing auto-assigns every order to the nearest available rider.",
+  "chan.title":"Order however you already message",
+  "chan.sub":"No app download required to get started.",
+  "presc.title":"Prescription, automated",
+  "presc.sub":"From photo to doorstep, with a licensed pharmacist checking every step.",
+  "deliv.title":"Choose your urgency",
+  "deliv.sub":"Five service levels for five kinds of need.",
+  "sub.title":"Auto-refill subscriptions",
+  "sub.sub":"For conditions that need medicine on a schedule, not a memory.",
+  "prof.title":"Your digital health profile",
+  "prof.sub":"Every prescription, refill, and reminder in one place — for you and your family.",
+  "prof.loyalty":"LOYALTY BALANCE",
+  "prof.tier":"Silver Tier",
+  "prof.next":"640 pts to Gold",
+  "loy.title":"Earn points, not just discounts",
+  "loy.sub":"Every interaction with the platform builds toward a reward.",
+  "kpi.title":"Built for operators, too",
+  "kpi.sub":"A live management dashboard behind every consumer order.",
+  "rider.title":"The rider app",
+  "rider.sub":"Everything a delivery partner needs, on the road.",
+  "corp.title":"Beyond individual customers",
+  "corp.sub":"Corporate partnerships and grassroots reach, side by side.",
+  "corp.h1":"Corporate partners",
+  "corp.h2":"Ground campaigns",
+  "tech.title":"What runs underneath",
+  "tech.sub":"A stack chosen for reliability at Bangladesh scale.",
+  "comp.title":"Consent comes first",
+  "comp.head":"On privacy & compliance",
+  "comp.body":"Collecting patient numbers from hospitals for marketing, without their explicit consent, risks breaching hospital policy and patient trust. Instead, consent is captured directly at registration or order time — an opt-in for reminders and offers, not an assumption.",
+  "vis.title":"A 5–10 year platform, not an app",
+  "vis.sub":"From medicine delivery to a connected network of patients, pharmacies, doctors, diagnostics, and home healthcare.",
+  "footer.text":"SHEBA+ — DIGITAL HEALTHCARE SUPPLY CHAIN, BANGLADESH",
+  "nav.home":"Home","nav.eco":"Ecosystem","nav.serv":"Services","nav.dash":"Dashboard","nav.more":"More"
+},
+bn:{
+  "hero.eyebrow":"ডিজিটাল হেলথকেয়ার সাপ্লাই চেইন",
+  "hero.title":"ওষুধ আপনার দরজায়, <span class=\"grad-text\">বিশ্বাস</span>সহ।",
+  "hero.sub":"লাস্ট-মাইল ডেলিভারি, ডিজিটাল অর্ডারিং আর স্থানীয় মার্কেটিং—সব একসাথে একটি প্ল্যাটফর্মে, বাংলাদেশ যেভাবে ওষুধ কেনে ঠিক সেভাবেই তৈরি।",
+  "stat.potential":"বিজনেস পটেনশিয়াল",
+  "stat.scale":"স্কেলেবিলিটি",
+  "stat.digital":"ডিজিটাল ইনোভেশন",
+  "stat.fit":"বাংলাদেশ ফিট",
+  "theme.label":"কেয়ার জার্নি অনুযায়ী থিম",
+  "theme.hint":"প্রতিটি রোগী ক্যাটাগরি অ্যাপকে তাদের প্রয়োজন অনুযায়ী সাজিয়ে দেয়।",
+  "cat.general":"সাধারণ",
+  "cat.diabetes":"ডায়াবেটিস",
+  "cat.heart":"হৃদরোগ",
+  "cat.children":"শিশু",
+  "cat.elderly":"প্রবীণ",
+  "cat.maternity":"মাতৃত্ব",
+  "eco.title":"একটি ইকোসিস্টেম, দশ ভূমিকা",
+  "eco.sub":"শুধু ডেলিভারি অ্যাপ নয়—ওষুধ যাদের মধ্য দিয়ে যায় তাদের সবাইকে সংযুক্ত করা একটি নেটওয়ার্ক।",
+  "dist.title":"ডিস্ট্রিবিউশন নেটওয়ার্ক",
+  "dist.sub":"ওষুধ একটি সংক্ষিপ্ত চেইনে চলে যাতে দ্রুত আপনার কাছে পৌঁছায়, শহর ঘুরে নয়।",
+  "dist.s1t":"সেন্ট্রাল ওয়্যারহাউস",
+  "dist.s1d":"বাল্ক স্টক, কোয়ালিটি কন্ট্রোল, কোল্ড-চেইন স্টোরেজ।",
+  "dist.s2t":"রিজিওনাল হাব",
+  "dist.s2d":"শহর বা জেলা অঞ্চল জুড়ে বিতরণ করে।",
+  "dist.s3t":"লোকাল হাব",
+  "dist.s3d":"এলাকাভিত্তিক স্টক, রাইডারের সবচেয়ে কাছে।",
+  "dist.s4t":"ডেলিভারি রাইডার",
+  "dist.s4d":"মাত্র ২–৩ কিমি ব্যাসার্ধ কভার করে।",
+  "dist.s5t":"কাস্টমার",
+  "dist.s5d":"গড়ে ৩০–৬০ মিনিটে অর্ডার পৌঁছে যায়।",
+  "dist.note":"জিপিএস রাউটিং প্রতিটি অর্ডার সবচেয়ে কাছের রাইডারকে স্বয়ংক্রিয়ভাবে দেয়।",
+  "chan.title":"যেভাবে মেসেজ করেন সেভাবেই অর্ডার করুন",
+  "chan.sub":"শুরু করতে অ্যাপ ডাউনলোডের দরকার নেই।",
+  "presc.title":"প্রেসক্রিপশন, স্বয়ংক্রিয়",
+  "presc.sub":"ছবি থেকে দরজা পর্যন্ত, প্রতিটি ধাপে একজন লাইসেন্সধারী ফার্মাসিস্ট যাচাই করেন।",
+  "deliv.title":"আপনার প্রয়োজন অনুযায়ী বেছে নিন",
+  "deliv.sub":"পাঁচ ধরনের প্রয়োজনের জন্য পাঁচ সার্ভিস লেভেল।",
+  "sub.title":"অটো-রিফিল সাবস্ক্রিপশন",
+  "sub.sub":"যেসব রোগে নিয়মিত ওষুধ দরকার, স্মৃতির উপর ভরসা না করে সময়মতো।",
+  "prof.title":"আপনার ডিজিটাল হেলথ প্রোফাইল",
+  "prof.sub":"প্রতিটি প্রেসক্রিপশন, রিফিল ও রিমাইন্ডার এক জায়গায়—আপনার ও পরিবারের জন্য।",
+  "prof.loyalty":"লয়্যালটি ব্যালেন্স",
+  "prof.tier":"সিলভার টিয়ার",
+  "prof.next":"গোল্ডের জন্য ৬৪০ পয়েন্ট বাকি",
+  "loy.title":"শুধু ডিসকাউন্ট নয়, পয়েন্টও অর্জন করুন",
+  "loy.sub":"প্ল্যাটফর্মের সাথে প্রতিটি ইন্টারঅ্যাকশন একটি রিওয়ার্ডের দিকে এগিয়ে নেয়।",
+  "kpi.title":"অপারেটরদের জন্যও তৈরি",
+  "kpi.sub":"প্রতিটি কাস্টমার অর্ডারের পেছনে একটি লাইভ ম্যানেজমেন্ট ড্যাশবোর্ড।",
+  "rider.title":"রাইডার অ্যাপ",
+  "rider.sub":"রাস্তায় থাকা ডেলিভারি পার্টনারের জন্য সবকিছু।",
+  "corp.title":"শুধু ব্যক্তি গ্রাহকের বাইরেও",
+  "corp.sub":"কর্পোরেট পার্টনারশিপ আর গ্রাসরুট প্রচারণা, পাশাপাশি।",
+  "corp.h1":"কর্পোরেট পার্টনার",
+  "corp.h2":"গ্রাউন্ড ক্যাম্পেইন",
+  "tech.title":"যা এর পেছনে কাজ করে",
+  "tech.sub":"বাংলাদেশ স্কেলে নির্ভরযোগ্যতার জন্য বাছাই করা স্ট্যাক।",
+  "comp.title":"সম্মতিই আগে",
+  "comp.head":"প্রাইভেসি ও কমপ্লায়েন্স নিয়ে",
+  "comp.body":"হাসপাতাল থেকে রোগীর নম্বর সংগ্রহ করে মার্কেটিংয়ে ব্যবহার করা, স্পষ্ট সম্মতি ছাড়া, হাসপাতালের নীতি ও রোগীর বিশ্বাস উভয়ই ভঙ্গ করতে পারে। এর পরিবর্তে, রেজিস্ট্রেশন বা অর্ডারের সময় সরাসরি সম্মতি নেওয়া হয়—রিমাইন্ডার ও অফারের জন্য অপ্ট-ইন, ধরে নেওয়া নয়।",
+  "vis.title":"৫–১০ বছরের প্ল্যাটফর্ম, শুধু অ্যাপ নয়",
+  "vis.sub":"ওষুধ ডেলিভারি থেকে রোগী, ফার্মেসি, ডাক্তার, ডায়াগনস্টিক ও হোম হেলথকেয়ারের একটি সংযুক্ত নেটওয়ার্ক পর্যন্ত।",
+  "footer.text":"শেবা+ — ডিজিটাল হেলথকেয়ার সাপ্লাই চেইন, বাংলাদেশ",
+  "nav.home":"হোম","nav.eco":"ইকোসিস্টেম","nav.serv":"সেবা","nav.dash":"ড্যাশবোর্ড","nav.more":"আরও"
+}
+};
+
+/* ============================================================
+   DATA-DRIVEN CONTENT (rendered into grids)
+============================================================ */
+const icon = (path)=>`<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+
+const ecoNodes = {
+  en:[
+    ["Customers", icon('<path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="7" r="4"/>'), "The people ordering and being cared for."],
+    ["Pharmacies", icon('<path d="M12 8v8M8 12h8"/><rect x="3" y="3" width="18" height="18" rx="3"/>'), "Local partners fulfilling and verifying every order."],
+    ["Doctors", icon('<path d="M9 3v4a2 2 0 002 2h2a2 2 0 002-2V3"/><path d="M6 8v8a6 6 0 0012 0V8"/>'), "Digital prescriptions and consultation links."],
+    ["Diagnostic Centers", icon('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'), "Test bookings and home sample collection."],
+    ["Hospitals", icon('<path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-6h4v6"/>'), "Referral and follow-up medicine handoff."],
+    ["Delivery Partners", icon('<circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M3 18h2l2-8h9l3 5h2v3"/>'), "Riders covering the last mile, block by block."],
+    ["Medicine Warehouse", icon('<path d="M3 9l9-6 9 6v11H3z"/><path d="M9 21V12h6v9"/>'), "Central stock with quality control."],
+    ["CRM & Marketing", icon('<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>'), "Segmented, permission-based outreach."],
+    ["AI Engine", icon('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h.01M15 9h.01M9 15c.7.7 1.9 1 3 1s2.3-.3 3-1"/>'), "Demand forecasting and recommendations."],
+    ["Customer Support", icon('<path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.5 8.5 0 01-4-1L3 20l1.1-4.5A8.5 8.5 0 1121 11.5z"/>'), "Human help across chat and call."]
+  ],
+  bn:[
+    ["কাস্টমার", icon('<path d="M20 21a8 8 0 10-16 0"/><circle cx="12" cy="7" r="4"/>'), "যারা অর্ডার করেন এবং সেবা পান।"],
+    ["ফার্মেসি", icon('<path d="M12 8v8M8 12h8"/><rect x="3" y="3" width="18" height="18" rx="3"/>'), "প্রতিটি অর্ডার যাচাই ও সরবরাহকারী স্থানীয় পার্টনার।"],
+    ["ডাক্তার", icon('<path d="M9 3v4a2 2 0 002 2h2a2 2 0 002-2V3"/><path d="M6 8v8a6 6 0 0012 0V8"/>'), "ডিজিটাল প্রেসক্রিপশন ও কনসালটেশন লিংক।"],
+    ["ডায়াগনস্টিক সেন্টার", icon('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'), "টেস্ট বুকিং ও হোম স্যাম্পল কালেকশন।"],
+    ["হাসপাতাল", icon('<path d="M3 21h18M6 21V8l6-4 6 4v13M10 21v-6h4v6"/>'), "রেফারেল ও ফলো-আপ ওষুধ হ্যান্ডঅফ।"],
+    ["ডেলিভারি পার্টনার", icon('<circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/><path d="M3 18h2l2-8h9l3 5h2v3"/>'), "এলাকাভিত্তিক লাস্ট-মাইল রাইডার।"],
+    ["মেডিসিন ওয়্যারহাউস", icon('<path d="M3 9l9-6 9 6v11H3z"/><path d="M9 21V12h6v9"/>'), "কোয়ালিটি কন্ট্রোলসহ কেন্দ্রীয় স্টক।"],
+    ["সিআরএম ও মার্কেটিং", icon('<path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>'), "সেগমেন্টেড, অনুমতি-ভিত্তিক প্রচার।"],
+    ["এআই ইঞ্জিন", icon('<rect x="4" y="4" width="16" height="16" rx="4"/><path d="M9 9h.01M15 9h.01M9 15c.7.7 1.9 1 3 1s2.3-.3 3-1"/>'), "চাহিদা পূর্বাভাস ও সুপারিশ।"],
+    ["কাস্টমার সাপোর্ট", icon('<path d="M21 11.5a8.4 8.4 0 01-8.9 8.4 8.5 8.5 0 01-4-1L3 20l1.1-4.5A8.5 8.5 0 1121 11.5z"/>'), "চ্যাট ও কলে মানবিক সহায়তা।"]
+  ]
+};
+
+const channels = {
+  en:["Website","Android App","WhatsApp","Messenger","Telegram","Instagram","Phone Call","Missed Call","SMS","QR Code","AI Chatbot"],
+  bn:["ওয়েবসাইট","অ্যান্ড্রয়েড অ্যাপ","হোয়াটসঅ্যাপ","মেসেঞ্জার","টেলিগ্রাম","ইনস্টাগ্রাম","ফোন কল","মিসড কল","এসএমএস","কিউআর কোড","এআই চ্যাটবট"]
+};
+
+const stepsData = {
+  en:[["Upload prescription","Snap a photo or PDF, no clinic visit needed."],
+      ["OCR reads medicine names","Automatic extraction, checked against inventory."],
+      ["Availability confirmed","Substitutes suggested if something is out of stock."],
+      ["Pharmacist verifies","A licensed pharmacist double-checks the order."],
+      ["Invoice generated","Clear pricing before you confirm payment."],
+      ["Payment","Card, mobile wallet, or cash on delivery."],
+      ["Delivery","Tracked in real time to your door."],
+      ["Saved to history","Ready for next time, and for refill reminders."]],
+  bn:[["প্রেসক্রিপশন আপলোড","ছবি বা পিডিএফ তুলুন, ক্লিনিকে যাওয়ার দরকার নেই।"],
+      ["ওসিআর ওষুধের নাম পড়ে","স্বয়ংক্রিয় এক্সট্র্যাকশন, ইনভেন্টরির সাথে মিলিয়ে দেখা হয়।"],
+      ["স্টক নিশ্চিত করা হয়","না থাকলে বিকল্প সাজেস্ট করা হয়।"],
+      ["ফার্মাসিস্ট যাচাই করেন","একজন লাইসেন্সধারী ফার্মাসিস্ট অর্ডার আবার চেক করেন।"],
+      ["ইনভয়েস তৈরি","পেমেন্ট কনফার্মের আগে স্পষ্ট মূল্য।"],
+      ["পেমেন্ট","কার্ড, মোবাইল ওয়ালেট বা ক্যাশ অন ডেলিভারি।"],
+      ["ডেলিভারি","রিয়েল-টাইমে ট্র্যাক করে আপনার দরজা পর্যন্ত।"],
+      ["হিস্ট্রিতে সংরক্ষিত","পরের বার ও রিফিল রিমাইন্ডারের জন্য প্রস্তুত।"]]
+};
+
+const delivTypes = {
+  en:[["30–45 min","Express","Urgent needs, priority rider"],
+      ["Today","Standard","Same-day, no rush fee"],
+      ["Pick a slot","Scheduled","Choose your delivery window"],
+      ["12AM–6AM","Midnight","For late-night essentials"],
+      ["<20 min","Emergency","Life-critical medicine, fastest lane"]],
+  bn:[["৩০–৪৫ মিনিট","এক্সপ্রেস","জরুরি প্রয়োজন, প্রায়োরিটি রাইডার"],
+      ["আজই","স্ট্যান্ডার্ড","একই দিনে, কোনো রাশ ফি নেই"],
+      ["সময় বেছে নিন","শিডিউলড","আপনার ডেলিভারি উইন্ডো বেছে নিন"],
+      ["রাত ১২–৬টা","মিডনাইট","গভীর রাতের জরুরি প্রয়োজনে"],
+      ["<২০ মিনিট","ইমার্জেন্সি","জীবন-জরুরি ওষুধ, দ্রুততম লেন"]]
+};
+
+const plans = {
+  en:[["💧","Diabetes"],["❤️","Blood Pressure"],["🫁","Asthma"],["🦋","Thyroid"],["🩺","Kidney Care"]],
+  bn:[["💧","ডায়াবেটিস"],["❤️","ব্লাড প্রেসার"],["🫁","অ্যাজমা"],["🦋","থাইরয়েড"],["🩺","কিডনি কেয়ার"]]
+};
+
+const widgets = {
+  en:[["Medicine history","Every past order, searchable."],
+      ["Family members","Manage profiles for parents & kids."],
+      ["Chronic conditions","Tracked for smarter reminders."],
+      ["Refill reminders","Never miss a dose again."],
+      ["Vaccination schedule","For the whole household."],
+      ["Monthly spending","A clear view of healthcare cost."]],
+  bn:[["মেডিসিন হিস্ট্রি","প্রতিটি আগের অর্ডার, খুঁজে পাওয়া যায়।"],
+      ["পরিবারের সদস্য","বাবা-মা ও সন্তানের প্রোফাইল ম্যানেজ করুন।"],
+      ["দীর্ঘমেয়াদি রোগ","স্মার্ট রিমাইন্ডারের জন্য ট্র্যাক করা।"],
+      ["রিফিল রিমাইন্ডার","আর কোনো ডোজ মিস হবে না।"],
+      ["ভ্যাকসিনেশন শিডিউল","পুরো পরিবারের জন্য।"],
+      ["মাসিক খরচ","স্বাস্থ্যসেবা খরচের স্পষ্ট চিত্র।"]]
+};
+
+const loyItems = {
+  en:["Every purchase earns points automatically","Referring a friend adds bonus points","Leaving a review is rewarded","Opening the app daily builds a streak","Completing a health checkup pays off","Birthday month brings surprise rewards"],
+  bn:["প্রতিটি কেনাকাটায় স্বয়ংক্রিয়ভাবে পয়েন্ট","বন্ধুকে রেফার করলে বোনাস পয়েন্ট","রিভিউ দিলে পুরস্কার","প্রতিদিন অ্যাপ খুললে স্ট্রিক বাড়ে","হেলথ চেকআপ সম্পন্ন করলে পয়েন্ট","জন্মমাসে চমক উপহার"]
+};
+
+const kpis = {
+  en:[["Daily Sales","৳ 84.2k",[40,55,45,70,60,90,75]],
+      ["Avg Delivery","38 min",[70,60,65,50,55,45,42]],
+      ["Repeat Rate","61%",[30,40,45,50,55,58,61]],
+      ["Cancellations","2.4%",[8,7,6,5,4,3,2]]],
+  bn:[["দৈনিক বিক্রি","৳ ৮৪.২ হাজার",[40,55,45,70,60,90,75]],
+      ["গড় ডেলিভারি","৩৮ মিনিট",[70,60,65,50,55,45,42]],
+      ["রিপিট রেট","৬১%",[30,40,45,50,55,58,61]],
+      ["বাতিল হার","২.৪%",[8,7,6,5,4,3,2]]]
+};
+
+const riderFeats = {
+  en:["Turn-by-turn navigation","Route optimization","Digital signature capture","OTP delivery confirmation","Earnings dashboard","Delivery proof photo","Cash collection tracking"],
+  bn:["টার্ন-বাই-টার্ন নেভিগেশন","রুট অপ্টিমাইজেশন","ডিজিটাল সিগনেচার","ওটিপি ডেলিভারি কনফার্মেশন","আর্নিংস ড্যাশবোর্ড","ডেলিভারি প্রুফ ছবি","ক্যাশ কালেকশন ট্র্যাকিং"]
+};
+
+const corpList = {
+  en:["Garment factories","Banks","Schools","Universities","Corporate offices","Insurance companies"],
+  bn:["গার্মেন্টস ফ্যাক্টরি","ব্যাংক","স্কুল","বিশ্ববিদ্যালয়","কর্পোরেট অফিস","ইন্স্যুরেন্স কোম্পানি"]
+};
+const campList = {
+  en:["QR-code pharmacy bags","Apartment campaigns","Health camps","School programs","Community noticeboards","Referral programs"],
+  bn:["কিউআর-কোড ফার্মেসি ব্যাগ","অ্যাপার্টমেন্ট ক্যাম্পেইন","স্বাস্থ্য শিবির","স্কুল প্রোগ্রাম","কমিউনিটি নোটিসবোর্ড","রেফারেল প্রোগ্রাম"]
+};
+
+const techStack = ["Mobile App","Website","Admin Dashboard","Pharmacy Dashboard","Rider App","CRM","ERP & Inventory","OCR Engine","AI Chatbot","SMS Gateway","WhatsApp API","Payment Gateway"];
+
+const visionPoints = {
+  en:["Fast, reliable delivery","Accurate fulfilment by licensed pharmacists","Smart, predictive inventory","Permission-based personalization","Deep pharmacy & hospital partnerships"],
+  bn:["দ্রুত ও নির্ভরযোগ্য ডেলিভারি","লাইসেন্সধারী ফার্মাসিস্টদের নির্ভুল সরবরাহ","স্মার্ট, পূর্বাভাসমূলক ইনভেন্টরি","অনুমতি-ভিত্তিক ব্যক্তিগতকরণ","গভীর ফার্মেসি ও হাসপাতাল পার্টনারশিপ"]
+};
+
+/* ============================================================
+   RENDER
+============================================================ */
+let currentLang = 'en';
+
+function renderAll(lang){
+  document.getElementById('ecoGrid').innerHTML = ecoNodes[lang].map(([t,i,d])=>`
+    <div class="node-card"><div class="node-ic">${i}</div><b>${t}</b><span>${d}</span></div>`).join('');
+
+  document.getElementById('channelGrid').innerHTML = channels[lang].map(c=>`
+    <div class="pill"><span class="dot2"></span>${c}</div>`).join('');
+
+  document.getElementById('stepperGrid').innerHTML = stepsData[lang].map(([t,d],idx)=>`
+    <div class="step"><div class="step-num">${idx+1}</div><div class="step-body"><b>${t}</b><span>${d}</span></div></div>`).join('');
+
+  document.getElementById('delivRow').innerHTML = delivTypes[lang].map(([time,name,desc])=>`
+    <div class="deliv-card"><div class="deliv-time">${time}</div><b>${name}</b><span>${desc}</span></div>`).join('');
+
+  document.getElementById('planRow').innerHTML = plans[lang].map(([e,name])=>`
+    <div class="plan"><div class="emoji">${e}</div><b>${name}</b></div>`).join('');
+
+  document.getElementById('widgetGrid').innerHTML = widgets[lang].map(([t,d])=>`
+    <div class="widget">${icon('<path d="M12 3v18M3 12h18"/>')}<b>${t}</b><span>${d}</span></div>`).join('');
+
+  document.getElementById('loyList').innerHTML = loyItems[lang].map(t=>`<li>${t}</li>`).join('');
+
+  document.getElementById('kpiGrid').innerHTML = kpis[lang].map(([lbl,val,bars])=>`
+    <div class="kpi"><span class="lbl">${lbl}</span><div class="val mono">${val}</div>
+      <div class="spark">${bars.map(h=>`<i style="height:${h}%"></i>`).join('')}</div></div>`).join('');
+
+  document.getElementById('riderGrid').innerHTML = riderFeats[lang].map(c=>`
+    <div class="pill"><span class="dot2"></span>${c}</div>`).join('');
+
+  document.getElementById('corpList').innerHTML = corpList[lang].map(c=>`<li>${c}</li>`).join('');
+  document.getElementById('campList').innerHTML = campList[lang].map(c=>`<li>${c}</li>`).join('');
+
+  document.getElementById('techGrid').innerHTML = techStack.map(c=>`<div class="tech-chip">${c}</div>`).join('');
+
+  document.getElementById('visList').innerHTML = visionPoints[lang].map(t=>`
+    <li>${icon('<path d="M20 6L9 17l-5-5"/>')}${t}</li>`).join('');
+}
+
+function applyI18n(lang){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(dict[lang][key] !== undefined){ el.innerHTML = dict[lang][key]; }
+  });
+}
+
+function toggleLang(){
+  currentLang = currentLang === 'en' ? 'bn' : 'en';
+  document.documentElement.setAttribute('data-lang', currentLang);
+  document.getElementById('langLabel').textContent = currentLang === 'en' ? 'বাংলা' : 'English';
+  applyI18n(currentLang);
+  renderAll(currentLang);
+  observeReveals();
+}
+
+/* theme chips */
+document.getElementById('chipRow').addEventListener('click', (e)=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+  chip.classList.add('active');
+  document.documentElement.setAttribute('data-theme', chip.dataset.theme);
+});
+
+/* bottom nav */
+const navItems = document.querySelectorAll('.bn-item');
+navItems.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = document.getElementById(btn.dataset.target);
+    const y = target.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({top:y, behavior:'smooth'});
+  });
+});
+const sectionEls = ['home','ecosystem','services','dashboard','more'].map(id=>document.getElementById(id));
+const navObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const id = entry.target.id;
+      navItems.forEach(b=>b.classList.toggle('active', b.dataset.target===id));
+    }
+  });
+},{rootMargin:'-40% 0px -50% 0px', threshold:0});
+sectionEls.forEach(s=>navObserver.observe(s));
+
+/* scroll reveal */
+function observeReveals(){
+  const els = document.querySelectorAll('.reveal:not(.in)');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:0.12});
+  els.forEach(el=>io.observe(el));
+}
+
+/* count-up numbers */
+function animateCounts(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target = parseFloat(el.getAttribute('data-count'));
+    const isDecimal = target % 1 !== 0;
+    let cur = 0;
+    const step = target / 40;
+    const tick = ()=>{
+      cur += step;
+      if(cur >= target){ el.textContent = isDecimal ? target.toFixed(1) : target; return; }
+      el.textContent = isDecimal ? cur.toFixed(1) : Math.floor(cur);
+      requestAnimationFrame(tick);
+    };
+    tick();
+  });
+}
+
+/* init */
+renderAll('en');
+applyI18n('en');
+observeReveals();
+setTimeout(animateCounts, 300);
+</script>
+</body>
+</html>
